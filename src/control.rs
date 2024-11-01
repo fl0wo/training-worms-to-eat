@@ -1,10 +1,7 @@
 use raylib::camera::Camera2D;
 use raylib::consts::MouseButton;
 use raylib::drawing::{RaylibDrawHandle};
-use raylib::ease;
-use raylib::ease::Tween;
 use raylib::math::Vector2;
-use crate::worm::Worm;
 
 const MOUSE_SENSITIVITY: f32 = 0.75;
 const MOUSE_ZOOM_SENSITIVITY: f32 = 0.005;
@@ -59,17 +56,13 @@ pub fn handle_controls(
         }
     }
 
-    // if user clicks on a worm, focus on it
-    // if d.is_mouse_button_down(MouseButton::MOUSE_BUTTON_LEFT) {
-        // if focus target, move camera to target
-        if let Some(target) = focus_target {
-            p0.target = p0.target.lerp(
-                Vector2::new(
-                    target.x - d.get_screen_width() as f32 / 2.0,
-                    target.y - d.get_screen_height() as f32 / 2.0,
-                ),
-                0.025,
-            );
-        }
-// }
+    if let Some(target) = focus_target {
+        p0.target = p0.target.lerp(
+            Vector2::new(
+                target.x - d.get_screen_width() as f32 / 2.0,
+                target.y - d.get_screen_height() as f32 / 2.0,
+            ),
+            0.025,
+        );
+    }
 }

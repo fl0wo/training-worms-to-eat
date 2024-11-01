@@ -17,13 +17,6 @@ pub fn draw_worm(
         0f32.max(percentage_animation - 0.5) * 2.0 // starts after 50% and goes to 100%
     );
 
-
-    //  let tween = Tween::new(
-    //             ease::quad_in_out,
-    //             p0.offset.x,
-    //             target.x - d.get_screen_width() as f32 / 2.0,
-    //             1.0,
-    //         );
     let circle_head = worm.prev_pos.lerp(
         worm.pos,
         1f32.min(percentage_animation * 2.0) // 2x faster to reach 100%
