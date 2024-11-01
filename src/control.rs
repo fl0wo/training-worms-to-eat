@@ -52,7 +52,7 @@ pub fn handle_controls(
                 target.x - d.get_screen_width() as f32 / 2.0,
                 target.y - d.get_screen_height() as f32 / 2.0,
             ),
-            0.025,
+            0.005,
         );
     }
 }
