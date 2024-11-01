@@ -1,15 +1,19 @@
 use raylib::color::Color;
 use raylib::drawing::{RaylibDraw, RaylibDrawHandle};
 
-pub fn draw_grid_lines(d: &mut RaylibDrawHandle) {
+pub fn drag_background(d: &mut RaylibDrawHandle) {
     // draw 10 hor and 10 ver lines (color rgb(170, 166, 157))
     let w = d.get_screen_width();
     let h = d.get_screen_height();
 
-    let n_lines = 10;
-
     let line_color = Color::new(170, 166, 157, 50);
+    draw_lines(d, w, h, 4, line_color);
 
+    let line_color = Color::new(170, 166, 157, 20);
+    draw_lines(d, w, h, 8, line_color);
+}
+
+fn draw_lines(d: &mut RaylibDrawHandle, w: i32, h: i32, n_lines: i32, line_color: Color) {
     for i in 0..n_lines {
         let x = (w / n_lines) * i;
         let y = (h / n_lines) * i;

@@ -107,8 +107,6 @@ pub fn draw_worm(
         255
     );
 
-    // draw rect over the worm's head
-
     let life_bar_width:f32 = 30.0;
 
     d.draw_rectangle(

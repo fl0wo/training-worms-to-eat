@@ -6,7 +6,7 @@ use std::ops::Deref;
 use raylib::color::Color;
 use raylib::drawing::{RaylibDraw, RaylibDrawHandle};
 use raylib::math::{Rectangle, Vector2};
-use crate::map::draw_grid_lines;
+use crate::map::drag_background;
 /**
 We generate 100 worms that move around randomly on the screen.
  */
@@ -62,7 +62,7 @@ fn main()
 
         let mut d = rl.begin_drawing(&thread);
         d.clear_background(Color::new(45, 52, 54, 255));
-        draw_grid_lines(&mut d);
+        drag_background(&mut d);
 
         let current_time = d.get_time();
         let delta_time = current_time - prev_time;
