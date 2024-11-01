@@ -1,4 +1,3 @@
-use std::ops::Add;
 use raylib::color::Color;
 use raylib::drawing::{RaylibDraw, RaylibDrawHandle};
 use raylib::math::{Rectangle, Vector2};
@@ -12,6 +11,7 @@ pub struct Worm {
     pub rotation: f32,
     pub speed: f32,
     pub ray: f32,
+    pub life: f32,
 }
 
 pub fn move_worm(worm: &mut Worm) {
@@ -30,6 +30,20 @@ pub fn move_worms(worms: &mut Vec<Worm>) {
     for worm in worms.iter_mut() {
         move_worm(worm);
     }
+}
+
+/**
+Based on how fast the worms are moving, they will lose energy.
+*/
+pub fn starve_worms(worms: &mut Vec<Worm>) {
+
+    let factor = 0.001;
+
+    for worm in worms.iter_mut() {
+        worm.life -= (factor + (factor * worm.speed));
+    }
+
+    worms.retain(|worm| worm.life > 0.0);
 }
 
 // 0% => a circle in the previous position
@@ -82,4 +96,26 @@ pub fn draw_worm(
         color_tail
     );
 
+    let life = worm.life // from 0 to 1
+        .max(0.0)
+        .min(1.0);
+
+    let life_color = Color::new(
+        (255.0 * (1.0 - life)) as u8,
+        (255.0 * (0.0 + life)) as u8,
+        0,
+        255
+    );
+
+    // draw rect over the worm's head
+
+    let life_bar_width:f32 = 30.0;
+
+    d.draw_rectangle(
+        (circle_head.x - (life_bar_width/2.0)) as i32,
+        circle_head.y as i32 - (worm.ray * 2.0) as i32,
+        (life_bar_width * life) as i32,
+        5,
+        life_color
+    );
 }

@@ -1,16 +1,18 @@
 mod math;
 mod worm;
+mod map;
 
 use std::ops::Deref;
 use raylib::color::Color;
 use raylib::drawing::{RaylibDraw, RaylibDrawHandle};
 use raylib::math::{Rectangle, Vector2};
+use crate::map::draw_grid_lines;
 /**
 We generate 100 worms that move around randomly on the screen.
  */
 
 use crate::math::{rand_float, rand_int};
-use crate::worm::{draw_worm, move_worm, move_worms, Worm};
+use crate::worm::{draw_worm, move_worm, move_worms, starve_worms, Worm};
 
 const EASING_SEC: f64 = 0.5;
 
@@ -50,6 +52,7 @@ fn main()
             speed: 20.0,
             rotation: 0.0,
             ray: 10.0,
+            life: 1.0,
         });
     }
 
@@ -73,29 +76,11 @@ fn main()
         }
 
         // if delta time is succeded, move the worms
-        if(d.get_time() - prev_time > EASING_SEC as f64) {
+        if(d.get_time() - prev_time > EASING_SEC) {
             prev_time = d.get_time();
             move_worms(&mut worms);
+            starve_worms(&mut worms);
         }
 
-
-    }
-}
-
-fn draw_grid_lines(d: &mut RaylibDrawHandle) {
-    // draw 10 hor and 10 ver lines (color rgb(170, 166, 157))
-    let w = d.get_screen_width();
-    let h = d.get_screen_height();
-
-    let n_lines = 10;
-
-    let line_color = Color::new(170, 166, 157, 50);
-
-    for i in 0..n_lines {
-        let x = (w / n_lines) * i;
-        let y = (h / n_lines) * i;
-
-        d.draw_line(x, 0, x, h, line_color);
-        d.draw_line(0, y, w, y, line_color);
     }
 }
