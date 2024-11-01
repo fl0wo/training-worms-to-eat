@@ -120,25 +120,26 @@ fn highlight_selected_worm(
     camera: &Camera2D
 ) {
 
-    let mut scaled_camera_offset = camera.offset.clone();
-    scaled_camera_offset.scale(1.0 / camera.zoom);
-
-    let cur_mouse_pos = sub_vec2(
+    let cur_mouse_pos = d2d.get_screen_to_world2D(
         d2d.get_mouse_position(),
-        scaled_camera_offset,
-        1.0
+        camera
     );
 
-    println!("Mouse pos: {:?}", cur_mouse_pos);
+    let closest_worm = worms
+        .iter()
+        .min_by(|a, b| {
+            a.pos.distance_to(cur_mouse_pos).partial_cmp(&b.pos.distance_to(cur_mouse_pos)).unwrap()
+        });
 
-    for worm in worms.iter() {
-        if worm.pos.distance_to(cur_mouse_pos) < (worm.ray * 4.0) {
-            d2d.draw_circle(
+    match closest_worm {
+        Some(worm) => {
+            d2d.draw_circle_lines(
                 worm.pos.x as i32,
                 worm.pos.y as i32,
-                worm.ray * 4.0,
+                worm.ray * 4.0 + 2.0,
                 Color::WHITE
             );
-        }
+        },
+        None => {}
     }
 }
