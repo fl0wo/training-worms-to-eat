@@ -1,23 +1,23 @@
 mod math;
-mod worm;
 mod map;
 mod control;
+mod worm;
+
 
 use std::ops::Deref;
 use raylib::camera::Camera2D;
 use raylib::color::Color;
 use raylib::drawing::{RaylibDraw, RaylibMode2DExt};
-use raylib::math::{Vector2};
+use raylib::math::Vector2;
 use crate::control::handle_controls;
 use crate::map::draw_background;
-/**
-We generate 100 worms that move around randomly on the screen.
- */
-
 use crate::math::{rand_float, rand_int};
 use crate::worm::{draw_worm, move_worms, starve_worms, Worm};
 
+
 const EASING_SEC: f64 = 0.5;
+const WIDTH: i32 = 800;
+const HEIGHT: i32 = 800;
 
 fn main()
 {
@@ -40,8 +40,8 @@ fn main()
         // but max 1 mutable reference at a time
 
         let initial_pos = Vector2::new(
-            rand_int(0, 800) as f32,
-            rand_int(0, 800) as f32
+            rand_int(0, WIDTH) as f32,
+            rand_int(0, HEIGHT) as f32
         );
 
         worms.push(Worm {
@@ -52,7 +52,7 @@ fn main()
                 rand_float(-1.0, 1.0) as f32
             ),
             color: Color::new(85, 239, 196, 255),
-            speed: 20.0,
+            speed: rand_float(10.0, 30.0),
             rotation: 0.0,
             ray: 10.0,
             life: 1.0,
@@ -64,7 +64,7 @@ fn main()
     // handle mousewheel to zoom in and out
     let mut camera = Camera2D {
         offset: Vector2::zero(),
-        target: Vector2::zero(),
+        target: Vector2::new(WIDTH as f32 / 2.0, HEIGHT as f32 / 2.0),
         rotation: 0.0,
         zoom: 1.0,
     };
@@ -84,7 +84,6 @@ fn main()
         d2d.clear_background(Color::new(45, 52, 54, 255));
         draw_background(&mut d2d);
 
-
         let current_time = d2d.get_time();
         let delta_time = current_time - prev_time;
 
@@ -96,7 +95,7 @@ fn main()
             );
         }
 
-        // if delta time is succeded, move the worms
+        // if delta time is succeeded, move the worms
         if(current_time - prev_time > EASING_SEC) {
             prev_time = current_time;
             move_worms(&mut worms);

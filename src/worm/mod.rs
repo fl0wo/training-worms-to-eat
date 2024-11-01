@@ -1,7 +1,9 @@
+use crate::math::add_vec2;
+
 use raylib::color::Color;
 use raylib::drawing::{RaylibDraw, RaylibDrawHandle, RaylibMode2D};
 use raylib::math::{Rectangle, Vector2};
-use crate::math::{add_vec2, vector_between};
+use crate::math::vector_between;
 
 pub struct Worm {
     pub pos: Vector2,
@@ -14,33 +16,15 @@ pub struct Worm {
     pub life: f32,
 }
 
-pub fn move_worm(worm: &mut Worm) {
-    worm.prev_pos = worm.pos; // is using copy
-
-    worm.pos.x += worm.dir.x * worm.speed;
-    worm.pos.y += worm.dir.y * worm.speed;
-
-    add_vec2(worm.pos, worm.dir);
-
-    // adapt the rotation to look in the direction of the movement
-    worm.rotation = worm.dir.y.atan2(worm.dir.x);
-}
-
-pub fn move_worms(worms: &mut Vec<Worm>) {
-    for worm in worms.iter_mut() {
-        move_worm(worm);
-    }
-}
-
 /**
 Based on how fast the worms are moving, they will lose energy.
-*/
+ */
 pub fn starve_worms(worms: &mut Vec<Worm>) {
 
     let factor = 0.001;
 
     for worm in worms.iter_mut() {
-        worm.life -= (factor + (factor * worm.speed));
+        worm.life -= factor * worm.speed;
     }
 
     worms.retain(|worm| worm.life > 0.0);
@@ -116,4 +100,16 @@ pub fn draw_worm(
         5,
         life_color
     );
+}
+
+pub fn move_worms(worms: &mut Vec<Worm>) {
+    for worm in worms.iter_mut() {
+        move_worm(worm);
+    }
+}
+
+fn move_worm(worm: &mut Worm) {
+    worm.prev_pos = worm.pos;
+    worm.pos = add_vec2(worm.pos, worm.dir, worm.speed);
+    worm.rotation = worm.dir.y.atan2(worm.dir.x);
 }

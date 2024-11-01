@@ -11,8 +11,11 @@ pub fn rand_float(min: f32, max: f32) -> f32 {
     rng.gen_range(min..max)
 }
 
-pub fn add_vec2(a: Vector2, b: Vector2) -> Vector2 {
-    Vector2::new(a.x + b.x, a.y + b.y)
+pub fn add_vec2(a: Vector2, b: Vector2, mul: f32) -> Vector2 {
+    Vector2::new(
+        a.x + b.x * mul,
+        a.y + b.y * mul
+    )
 }
 
 pub fn vector_between(a: Vector2, b: Vector2) -> Vector2 {

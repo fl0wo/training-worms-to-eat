@@ -43,7 +43,4 @@ pub fn handle_controls(
             p0.zoom = MIN_ZOOM;
         }
     }
-
-    println!("camera offset: {:?}", p0.offset);
-    println!("camera zoom: {:?}", p0.zoom);
 }
