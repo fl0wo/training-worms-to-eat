@@ -16,5 +16,5 @@ pub struct Worm {
     pub rotation: f32,
     pub speed: f32,
     pub ray: f32,
-    pub life: f32,
+    pub life: f32, // from 0 to 1
 }

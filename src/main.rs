@@ -20,7 +20,7 @@ use crate::worm::draw::{draw_worms};
 use crate::worm::generate::generate_worms;
 use crate::worm::r#move::move_worms;
 use crate::worm::search::highlight_selected_worm;
-use crate::worm::starve::starve_worms;
+use crate::worm::starve::{feed_worms, starve_worms};
 
 
 const EASING_SEC: f64 = 0.5;
@@ -69,11 +69,16 @@ fn main()
         let current_time = d2d.get_time();
         let delta_time = current_time - prev_time;
 
-        draw_foods(&mut d2d, &food, (delta_time / EASING_SEC) as f32);
+        draw_foods(
+            &mut d2d,
+            &food,
+            (delta_time / EASING_SEC) as f32
+        );
 
         draw_worms(
             &mut d2d,
-            &worms,(delta_time / EASING_SEC) as f32
+            &worms,
+            (delta_time / EASING_SEC) as f32
         );
 
         if let Some(worm) = highlight_selected_worm(
@@ -89,6 +94,7 @@ fn main()
             prev_time = current_time;
             move_worms(&mut worms);
             starve_worms(&mut worms);
+            feed_worms(&mut worms, &mut food);
         }
 
     }

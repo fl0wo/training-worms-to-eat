@@ -17,7 +17,6 @@ pub fn generate_food(num_food: i32) -> Vec<Food> {
         food.push(Food {
             pos,
             amount,
-            ray: 0.5 * amount,
             color: raylib::color::Color::ROSYBROWN
         });
     }
