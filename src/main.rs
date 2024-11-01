@@ -73,6 +73,7 @@ fn main()
     };
 
     let mut prev_mouse_pos = Vector2::zero();
+    let mut focus_target: Option<Vector2> = None;
 
     while !rl.window_should_close() {
 
@@ -80,7 +81,8 @@ fn main()
         handle_controls(
             &mut camera,
             &mut d,
-            &mut prev_mouse_pos
+            &mut prev_mouse_pos,
+            &focus_target,
         );
         let mut d2d = d.begin_mode2D(camera);
 
@@ -98,11 +100,13 @@ fn main()
             );
         }
 
-        highlight_selected_worm(
+        if let Some(worm) = highlight_selected_worm(
             &worms,
             &mut d2d,
             &camera
-        );
+        ) {
+            focus_target = Some(worm.pos);
+        }
 
         // if delta time is succeeded, move the worms
         if(current_time - prev_time > EASING_SEC) {
@@ -114,11 +118,11 @@ fn main()
     }
 }
 
-fn highlight_selected_worm(
-    worms: &Vec<Worm>,
+fn highlight_selected_worm<'a>(
+    worms: &'a Vec<Worm>,
     d2d: &mut RaylibMode2D<RaylibDrawHandle>,
     camera: &Camera2D
-) {
+) -> Option<&'a Worm> {
 
     let cur_mouse_pos = d2d.get_screen_to_world2D(
         d2d.get_mouse_position(),
@@ -142,4 +146,6 @@ fn highlight_selected_worm(
         },
         None => {}
     }
+
+    return closest_worm
 }
