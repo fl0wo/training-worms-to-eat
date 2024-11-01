@@ -19,16 +19,6 @@ pub fn handle_controls(
 
     // mouse drag to move camera
     if d.is_mouse_button_down(MouseButton::MOUSE_BUTTON_LEFT) {
-        let mouse_pos = d.get_mouse_position();
-        let diff = Vector2::new(
-            (mouse_pos.x - prev_mouse_pos.x) * MOUSE_SENSITIVITY,
-            (mouse_pos.y - prev_mouse_pos.y) * MOUSE_SENSITIVITY,
-        );
-
-        p0.offset.x += diff.x;
-        p0.offset.y += diff.y;
-
-        *prev_mouse_pos = mouse_pos;
     } else {
         *prev_mouse_pos = d.get_mouse_position();
     }
