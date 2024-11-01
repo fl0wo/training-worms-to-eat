@@ -36,7 +36,22 @@ pub fn handle_controls(
     let scroll = d.get_mouse_wheel_move();
 
     if scroll != 0.0 {
+
+        // move target to zoom towards the mouse position
+
+        let mouse_pos = d.get_mouse_position();
+
+        let offset = Vector2::new(
+            (mouse_pos.x - p0.offset.x) / p0.zoom,
+            (mouse_pos.y - p0.offset.y) / p0.zoom,
+        );
+
+        p0.offset.x -= offset.x * scroll * MOUSE_ZOOM_SENSITIVITY;
+        p0.offset.y -= offset.y * scroll * MOUSE_ZOOM_SENSITIVITY;
+
+
         p0.zoom += scroll * MOUSE_ZOOM_SENSITIVITY;
+
         if p0.zoom > MAX_ZOOM {
             p0.zoom = MAX_ZOOM;
         } else if p0.zoom < MIN_ZOOM {

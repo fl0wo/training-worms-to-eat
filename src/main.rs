@@ -12,7 +12,10 @@ use raylib::math::Vector2;
 use crate::control::handle_controls;
 use crate::map::draw_background;
 use crate::math::{rand_float, rand_int};
-use crate::worm::{draw_worm, move_worms, starve_worms, Worm};
+use crate::worm::{Worm};
+use crate::worm::draw::draw_worm;
+use crate::worm::r#move::move_worms;
+use crate::worm::starve::starve_worms;
 
 
 const EASING_SEC: f64 = 0.5;
