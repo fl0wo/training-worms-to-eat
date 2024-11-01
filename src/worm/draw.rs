@@ -4,10 +4,25 @@ use raylib::math::{Rectangle, Vector2};
 use crate::math::vector_between;
 use crate::worm::Worm;
 
+
+pub fn draw_worms(
+    d2d: &mut RaylibMode2D<RaylibDrawHandle>,
+    worms: &Vec<Worm>,
+    percentage_animation: f32 // from 0 to 1
+) {
+    for worm in worms.iter() {
+        draw_worm(
+            d2d,
+            worm,
+            percentage_animation
+        );
+    }
+}
+
 // 0% => a circle in the previous position
 // 50% => a circle in the final position (and a rectangle following the circle with the right rotation)
 // 100% => a circle in the final position
-pub fn draw_worm(
+fn draw_worm(
     d: &mut RaylibMode2D<RaylibDrawHandle>,
     worm: &Worm,
     percentage_animation: f32 // from 0 to 1

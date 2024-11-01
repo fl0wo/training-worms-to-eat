@@ -2,6 +2,7 @@ mod math;
 mod map;
 mod control;
 mod worm;
+mod food;
 
 
 use std::ops::{Add, Deref, Sub};
@@ -10,10 +11,12 @@ use raylib::color::Color;
 use raylib::drawing::{RaylibDraw, RaylibDrawHandle, RaylibMode2D, RaylibMode2DExt};
 use raylib::math::Vector2;
 use crate::control::handle_controls;
+use crate::food::Food;
+use crate::food::generate::generate_food;
 use crate::map::draw_background;
-use crate::math::{add_vec2, rand_float, rand_int, sub_vec2};
 use crate::worm::{Worm};
-use crate::worm::draw::draw_worm;
+use crate::worm::draw::{draw_worms};
+use crate::worm::generate::generate_worms;
 use crate::worm::r#move::move_worms;
 use crate::worm::starve::starve_worms;
 
@@ -31,36 +34,8 @@ fn main()
         .build();
 
     let num_worms = 100;
-
-    // mutable means that the value of worms can be changed
-    let mut worms: Vec<Worm> = Vec::new();
-
-    for _ in 0..num_worms {
-        // worms becomes the owner of the Worm struct
-        // can only be 1 owner at a time
-
-        // when passing with reference, can pass infinite const immutable (readonly) references
-        // but max 1 mutable reference at a time
-
-        let initial_pos = Vector2::new(
-            rand_int(0, WIDTH) as f32,
-            rand_int(0, HEIGHT) as f32
-        );
-
-        worms.push(Worm {
-            prev_pos: initial_pos,
-            pos: initial_pos,
-            dir: Vector2::new(
-                rand_float(-1.0, 1.0) as f32,
-                rand_float(-1.0, 1.0) as f32
-            ),
-            color: Color::new(85, 239, 196, 255),
-            speed: rand_float(10.0, 30.0),
-            rotation: 0.0,
-            ray: 10.0,
-            life: 1.0,
-        });
-    }
+    let mut worms: Vec<Worm> = generate_worms(num_worms);
+    let mut food: Vec<Food> = generate_food(10);
 
     let mut prev_time = rl.get_time();
 
@@ -92,13 +67,12 @@ fn main()
         let current_time = d2d.get_time();
         let delta_time = current_time - prev_time;
 
-        for worm in worms.iter() {
-            draw_worm(
-                &mut d2d,
-                worm,
-                (delta_time / EASING_SEC) as f32
-            );
-        }
+        draw_worms(
+            &mut d2d,
+            &worms,(delta_time / EASING_SEC) as f32
+        );
+
+
 
         if let Some(worm) = highlight_selected_worm(
             &worms,

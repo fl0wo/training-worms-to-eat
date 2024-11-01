@@ -1,6 +1,7 @@
 pub mod starve;
 pub mod draw;
 pub mod r#move;
+pub mod generate;
 
 use raylib::color::Color;
 use raylib::drawing::{RaylibDraw};
