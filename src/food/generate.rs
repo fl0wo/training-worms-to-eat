@@ -12,13 +12,13 @@ pub fn generate_food(num_food: i32) -> Vec<Food> {
             rand_int(0, 450) as f32
         );
 
-        let amount = rand_float(0.0, 100.0);
+        let amount = rand_float(70.0, 100.0);
 
         food.push(Food {
             pos,
             amount,
-            ray: 0.1 * amount,
-            color: raylib::color::Color::new(255, 255, 255, 255)
+            ray: 0.5 * amount,
+            color: raylib::color::Color::ROSYBROWN
         });
     }
 

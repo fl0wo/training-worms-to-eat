@@ -11,6 +11,7 @@ use raylib::color::Color;
 use raylib::drawing::{RaylibDraw, RaylibDrawHandle, RaylibMode2D, RaylibMode2DExt};
 use raylib::math::Vector2;
 use crate::control::handle_controls;
+use crate::food::draw::draw_foods;
 use crate::food::Food;
 use crate::food::generate::generate_food;
 use crate::map::draw_background;
@@ -18,6 +19,7 @@ use crate::worm::{Worm};
 use crate::worm::draw::{draw_worms};
 use crate::worm::generate::generate_worms;
 use crate::worm::r#move::move_worms;
+use crate::worm::search::highlight_selected_worm;
 use crate::worm::starve::starve_worms;
 
 
@@ -67,12 +69,12 @@ fn main()
         let current_time = d2d.get_time();
         let delta_time = current_time - prev_time;
 
+        draw_foods(&mut d2d, &food, (delta_time / EASING_SEC) as f32);
+
         draw_worms(
             &mut d2d,
             &worms,(delta_time / EASING_SEC) as f32
         );
-
-
 
         if let Some(worm) = highlight_selected_worm(
             &worms,
@@ -90,36 +92,4 @@ fn main()
         }
 
     }
-}
-
-fn highlight_selected_worm<'a>(
-    worms: &'a Vec<Worm>,
-    d2d: &mut RaylibMode2D<RaylibDrawHandle>,
-    camera: &Camera2D
-) -> Option<&'a Worm> {
-
-    let cur_mouse_pos = d2d.get_screen_to_world2D(
-        d2d.get_mouse_position(),
-        camera
-    );
-
-    let closest_worm = worms
-        .iter()
-        .min_by(|a, b| {
-            a.pos.distance_to(cur_mouse_pos).partial_cmp(&b.pos.distance_to(cur_mouse_pos)).unwrap()
-        });
-
-    match closest_worm {
-        Some(worm) => {
-            d2d.draw_circle_lines(
-                worm.pos.x as i32,
-                worm.pos.y as i32,
-                worm.ray * 4.0 + 2.0,
-                Color::WHITE
-            );
-        },
-        None => {}
-    }
-
-    return closest_worm
 }
