@@ -1,5 +1,5 @@
 use raylib::color::Color;
-use raylib::drawing::{RaylibDraw, RaylibDrawHandle};
+use raylib::drawing::{RaylibDraw, RaylibDrawHandle, RaylibMode2D};
 use raylib::math::{Rectangle, Vector2};
 use crate::math::{add_vec2, vector_between};
 
@@ -50,7 +50,7 @@ pub fn starve_worms(worms: &mut Vec<Worm>) {
 // 50% => a circle in the final position (and a rectangle following the circle with the right rotation)
 // 100% => a circle in the final position
 pub fn draw_worm(
-    d: &mut RaylibDrawHandle,
+    d: &mut RaylibMode2D<RaylibDrawHandle>,
     worm: &Worm,
     percentage_animation: f32 // from 0 to 1
 ) {

@@ -1,18 +1,21 @@
 mod math;
 mod worm;
 mod map;
+mod control;
 
 use std::ops::Deref;
+use raylib::camera::Camera2D;
 use raylib::color::Color;
-use raylib::drawing::{RaylibDraw, RaylibDrawHandle};
-use raylib::math::{Rectangle, Vector2};
-use crate::map::drag_background;
+use raylib::drawing::{RaylibDraw, RaylibMode2DExt};
+use raylib::math::{Vector2};
+use crate::control::handle_controls;
+use crate::map::draw_background;
 /**
 We generate 100 worms that move around randomly on the screen.
  */
 
 use crate::math::{rand_float, rand_int};
-use crate::worm::{draw_worm, move_worm, move_worms, starve_worms, Worm};
+use crate::worm::{draw_worm, move_worms, starve_worms, Worm};
 
 const EASING_SEC: f64 = 0.5;
 
@@ -58,26 +61,44 @@ fn main()
 
     let mut prev_time = rl.get_time();
 
+    // handle mousewheel to zoom in and out
+    let mut camera = Camera2D {
+        offset: Vector2::zero(),
+        target: Vector2::zero(),
+        rotation: 0.0,
+        zoom: 1.0,
+    };
+
+    let mut prev_mouse_pos = Vector2::zero();
+
     while !rl.window_should_close() {
 
         let mut d = rl.begin_drawing(&thread);
-        d.clear_background(Color::new(45, 52, 54, 255));
-        drag_background(&mut d);
+        handle_controls(
+            &mut camera,
+            &mut d,
+            &mut prev_mouse_pos
+        );
+        let mut d2d = d.begin_mode2D(camera);
 
-        let current_time = d.get_time();
+        d2d.clear_background(Color::new(45, 52, 54, 255));
+        draw_background(&mut d2d);
+
+
+        let current_time = d2d.get_time();
         let delta_time = current_time - prev_time;
 
         for worm in worms.iter() {
             draw_worm(
-                &mut d,
+                &mut d2d,
                 worm,
                 (delta_time / EASING_SEC) as f32
             );
         }
 
         // if delta time is succeded, move the worms
-        if(d.get_time() - prev_time > EASING_SEC) {
-            prev_time = d.get_time();
+        if(current_time - prev_time > EASING_SEC) {
+            prev_time = current_time;
             move_worms(&mut worms);
             starve_worms(&mut worms);
         }
