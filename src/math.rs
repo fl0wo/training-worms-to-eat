@@ -14,7 +14,14 @@ pub fn rand_float(min: f32, max: f32) -> f32 {
 pub fn add_vec2(a: Vector2, b: Vector2, mul: f32) -> Vector2 {
     Vector2::new(
         a.x + b.x * mul,
-        a.y + b.y * mul
+        a.y + b.y * mul,
+    )
+}
+
+pub fn sub_vec2(a: Vector2, b: Vector2, mul: f32) -> Vector2 {
+    Vector2::new(
+        a.x - b.x * mul,
+        a.y - b.y * mul,
     )
 }
 

@@ -4,14 +4,14 @@ mod control;
 mod worm;
 
 
-use std::ops::Deref;
+use std::ops::{Add, Deref, Sub};
 use raylib::camera::Camera2D;
 use raylib::color::Color;
-use raylib::drawing::{RaylibDraw, RaylibMode2DExt};
+use raylib::drawing::{RaylibDraw, RaylibDrawHandle, RaylibMode2D, RaylibMode2DExt};
 use raylib::math::Vector2;
 use crate::control::handle_controls;
 use crate::map::draw_background;
-use crate::math::{rand_float, rand_int};
+use crate::math::{add_vec2, rand_float, rand_int, sub_vec2};
 use crate::worm::{Worm};
 use crate::worm::draw::draw_worm;
 use crate::worm::r#move::move_worms;
@@ -67,7 +67,7 @@ fn main()
     // handle mousewheel to zoom in and out
     let mut camera = Camera2D {
         offset: Vector2::zero(),
-        target: Vector2::new(WIDTH as f32 / 2.0, HEIGHT as f32 / 2.0),
+        target: Vector2::zero(),
         rotation: 0.0,
         zoom: 1.0,
     };
@@ -98,6 +98,12 @@ fn main()
             );
         }
 
+        highlight_selected_worm(
+            &worms,
+            &mut d2d,
+            &camera
+        );
+
         // if delta time is succeeded, move the worms
         if(current_time - prev_time > EASING_SEC) {
             prev_time = current_time;
@@ -105,5 +111,34 @@ fn main()
             starve_worms(&mut worms);
         }
 
+    }
+}
+
+fn highlight_selected_worm(
+    worms: &Vec<Worm>,
+    d2d: &mut RaylibMode2D<RaylibDrawHandle>,
+    camera: &Camera2D
+) {
+
+    let mut scaled_camera_offset = camera.offset.clone();
+    scaled_camera_offset.scale(1.0 / camera.zoom);
+
+    let cur_mouse_pos = sub_vec2(
+        d2d.get_mouse_position(),
+        scaled_camera_offset,
+        1.0
+    );
+
+    println!("Mouse pos: {:?}", cur_mouse_pos);
+
+    for worm in worms.iter() {
+        if worm.pos.distance_to(cur_mouse_pos) < (worm.ray * 4.0) {
+            d2d.draw_circle(
+                worm.pos.x as i32,
+                worm.pos.y as i32,
+                worm.ray * 4.0,
+                Color::WHITE
+            );
+        }
     }
 }
