@@ -14,3 +14,10 @@ pub fn rand_float(min: f32, max: f32) -> f32 {
 pub fn add_vec2(a: Vector2, b: Vector2) -> Vector2 {
     Vector2::new(a.x + b.x, a.y + b.y)
 }
+
+pub fn vector_between(a: Vector2, b: Vector2) -> Vector2 {
+    Vector2::new(
+        (a.x + b.x) / 2.0,
+        (a.y + b.y) / 2.0
+    )
+}
