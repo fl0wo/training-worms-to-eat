@@ -3,6 +3,7 @@ mod map;
 mod control;
 mod worm;
 mod food;
+mod train;
 
 
 use std::ops::{Add, Deref, Sub};
@@ -21,7 +22,6 @@ use crate::worm::generate::generate_worms;
 use crate::worm::r#move::move_worms;
 use crate::worm::search::highlight_selected_worm;
 use crate::worm::starve::{feed_worms, starve_worms};
-
 
 const EASING_SEC: f64 = 0.5;
 const WIDTH: i32 = 800;

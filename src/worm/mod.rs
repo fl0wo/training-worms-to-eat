@@ -9,12 +9,12 @@ use raylib::drawing::{RaylibDraw};
 use raylib::math::{Vector2};
 
 pub struct Worm {
-    pub pos: Vector2,
-    pub prev_pos: Vector2,
+    pub pos: Vector2, // in pixels
+    pub prev_pos: Vector2, // in pixels
     pub dir: Vector2,
-    pub color: Color,
-    pub rotation: f32,
-    pub speed: f32,
-    pub ray: f32,
+    pub color: Color, // constant
+    pub rotation: f32, // in radians
+    pub speed: f32, // from 0 to 1
+    pub ray: f32, // constant
     pub life: f32, // from 0 to 1
 }
