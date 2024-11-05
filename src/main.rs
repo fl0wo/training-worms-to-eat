@@ -5,7 +5,6 @@ mod worm;
 mod food;
 mod train;
 
-
 use std::ops::{Add, Deref, Sub};
 use raylib::camera::Camera2D;
 use raylib::color::Color;

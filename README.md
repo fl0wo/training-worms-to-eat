@@ -1,9 +1,6 @@
 ## IDEAS
 
 
-GIA FATTE:
-1. Piu' veloce un verme va, piu' vita consuma (un verme puo' anche stare fermo, e consuma pochissima vita)
-
 TODO:
 1. Macchia d'olio rallenta i vermi
 2. Nemici fermi, che se approcciati da soli ti uccidono, se approcciati in gruppo lo mangiate

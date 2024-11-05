@@ -23,7 +23,7 @@ pub fn feed_worms(worms: &mut Vec<Worm>, food: &mut Vec<Food>) {
     // For each worm, check if it is colliding with any food
     for worm in worms.iter_mut() {
         for f in food.iter_mut() {
-            if(f.amount <= 0.0) {
+            if f.amount <= 0.0 {
                 continue;
             }
 
