@@ -11,9 +11,9 @@ use std::io::{self, Write};
 use crate::math::rand_int;
 
 #[derive(Debug, Clone)]
-struct Food {
-    position: (i32, i32),
-    value: i32,
+pub struct Food {
+    pub(crate) position: (i32, i32),
+    pub(crate) value: i32,
 }
 
 #[derive(Debug, Clone)]
@@ -24,15 +24,15 @@ struct Worm {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-struct WormBrain {
+pub struct WormBrain {
     food_attraction: f64,
-    speed_factor: f64,
-    life_threshold: f64,
+    pub(crate) speed_factor: f64,
+    pub(crate) life_threshold: f64,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-struct WormModel {
-    brain: WormBrain,
+pub struct WormModel {
+    pub(crate) brain: WormBrain,
     fitness: i32,
 }
 
@@ -49,7 +49,7 @@ fn save_model(model: &WormModel, filename: &str) -> io::Result<()> {
     Ok(())
 }
 impl WormBrain {
-    fn calculate_direction(&self, worm_pos: (f64, f64), foods: &[Food]) -> f64 {
+    pub(crate) fn calculate_direction(&self, worm_pos: (f64, f64), foods: &[Food]) -> f64 {
         if foods.is_empty() {
             // When no food is available, move in a circular pattern
             let current_angle = worm_pos.1.atan2(worm_pos.0);

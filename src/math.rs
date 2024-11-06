@@ -31,3 +31,10 @@ pub fn vector_between(a: Vector2, b: Vector2) -> Vector2 {
         (a.y + b.y) / 2.0
     )
 }
+
+pub fn from_angle_to_vec2(angle: f32) -> Vector2 {
+    Vector2::new(
+        angle.cos(),
+        angle.sin(),
+    )
+}

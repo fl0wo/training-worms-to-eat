@@ -27,7 +27,7 @@ pub fn generate_worms(num_worms: i32) -> Vec<Worm> {
                 rand_float(-1.0, 1.0) as f32
             ),
             color: Color::new(85, 239, 196, 255),
-            speed: rand_float(10.0, 30.0),
+            speed: rand_float(30.0, 100.0),
             rotation: 0.0,
             ray: 10.0,
             life: 1.0,

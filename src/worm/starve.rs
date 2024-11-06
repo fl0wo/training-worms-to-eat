@@ -29,7 +29,7 @@ pub fn feed_worms(worms: &mut Vec<Worm>, food: &mut Vec<Food>) {
 
             if check_collision_circles(worm.pos, worm.ray, f.pos, ray_of_food(f)) {
                 worm.life = (worm.life + 2.0 * max_eat).min(1.0);
-                f.amount -= f.amount.min(max_eat);
+                f.amount -= f.amount.min(max_eat) / 100f32;
             }
         }
     }

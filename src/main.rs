@@ -5,6 +5,7 @@ mod worm;
 mod food;
 mod train;
 
+use std::fs;
 use std::ops::{Add, Deref, Sub};
 use raylib::camera::Camera2D;
 use raylib::color::Color;
@@ -15,6 +16,8 @@ use crate::food::draw::draw_foods;
 use crate::food::Food;
 use crate::food::generate::generate_food;
 use crate::map::draw_background;
+use crate::math::from_angle_to_vec2;
+use crate::train::WormModel;
 use crate::worm::{Worm};
 use crate::worm::draw::{draw_worms};
 use crate::worm::generate::generate_worms;
@@ -91,10 +94,55 @@ fn main()
         // if delta time is succeeded, move the worms
         if(current_time - prev_time > EASING_SEC) {
             prev_time = current_time;
+            change_worms_direction(&mut worms, &food);
             move_worms(&mut worms);
             starve_worms(&mut worms);
             feed_worms(&mut worms, &mut food);
         }
 
+    }
+}
+
+fn change_worms_direction(worms: &mut Vec<Worm>, foods: &Vec<Food>) {
+    // Load and parse the model only once
+    let model_json = match fs::read_to_string("worm_model.json") {
+        Ok(content) => content,
+        Err(e) => {
+            eprintln!("Error reading model file: {}", e);
+            return;
+        }
+    };
+
+    let model: WormModel = match serde_json::from_str(&model_json) {
+        Ok(m) => m,
+        Err(e) => {
+            eprintln!("Error parsing model JSON: {}", e);
+            return;
+        }
+    };
+
+    let foods_models = foods.iter().map(|food| {
+        train::Food {
+            position: (food.pos.x as i32, food.pos.y as i32),
+            value: food.amount as i32,
+        }
+    }).collect::<Vec<_>>();
+
+    // Update each worm's direction using the model's brain
+    for worm in worms.iter_mut() {
+        let direction = model.brain.calculate_direction(
+            (worm.pos.x as f64, worm.pos.y as f64),
+            foods_models.deref(),
+        );
+
+        // Store the calculated direction (in radians) in the worm
+        worm.dir = from_angle_to_vec2(direction as f32);
+
+        // If the worm's life is below threshold, increase speed
+        if worm.life < model.brain.life_threshold as f32 {
+            worm.speed = (model.brain.speed_factor * 1.5) as f32;
+        } else {
+            worm.speed = model.brain.speed_factor as f32;
+        }
     }
 }
