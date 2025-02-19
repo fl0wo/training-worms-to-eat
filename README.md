@@ -1,9 +1,5 @@
-## IDEAS
+## Training worms
 
+Training worms to go to the food and eat it, not eating too much of it in order to let the other worms eat too.
 
-TODO:
-1. Macchia d'olio rallenta i vermi
-2. Nemici fermi, che se approcciati da soli ti uccidono, se approcciati in gruppo lo mangiate
-3. Cibo spawna in scarsita' e a rotazione sempre nei stessi punti (stagione)
-4. Un verme puo' decidere di attaccare un amico, ma se lo fa, perde tantissima vita (perche mai un verme dovrebbe attaccarti? Xke il cibo scarseggia)
-5. Se due vermi stanno vicini per diversi secondi, e hanno entrambi vita quasi piena, si accoppiano e fanno un nuovo verme cucciolo 
+![wormstraining.gif](wormstraining.gif)
